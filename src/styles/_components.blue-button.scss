@@ -1,0 +1,6 @@
+@mixin blue-button {
+  height: 40px;
+  background: var(--appBlue);
+  color: #fff;
+  padding: 8px 70px;
+}

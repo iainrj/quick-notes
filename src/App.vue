@@ -1,32 +1,76 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div class="app" id="app">
+    <main class="content">
+      <NotesMetadata />
+      <Notes />
+    </main>
   </div>
 </template>
 
+<script lang="ts">
+import Vue from 'vue';
+import NotesMetadata from '@/components/NotesMetadata.vue';
+import Notes from '@/components/Notes.vue';
+import { mapActions } from 'vuex';
+
+export default Vue.extend({
+  name: 'App',
+  components: {
+    NotesMetadata,
+    Notes,
+  },
+  methods: {
+    ...mapActions(['loadNotes']),
+  },
+  mounted() {
+    this.loadNotes();
+  },
+});
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html {
+  height: 100%;
+  --appBackground: #eeecec;
+  --textColor: #4a4a4a;
+  --textColor2: #6e6e6e;
+  --accentGrey: rgb(134, 134, 134);
+  --appBlue: rgb(12, 84, 137);
+  --appRed: #ec0b0b;
+}
+body {
+  margin: 0;
+  height: 100%;
+  color: var(--textColor);
+  font-family: 'Helvetica', sans-serif;
+  background: var(--appBackground);
 }
 
-#nav {
-  padding: 30px;
+p {
+  margin: 0;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+button {
+  background: none;
+  border: none;
+  outline: none;
+  font: 300 15px 'Helvetica', sans-serif;
+  padding: 0;
+  border-radius: 2px;
+  cursor: pointer;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+input, textarea {
+  font: 400 15px 'Helvetica', sans-serif;
+}
+
+.app {
+  height: 100%;
+  width: 100%;
+}
+
+.content {
+  margin: auto;
+  max-width: 860px;
 }
 </style>

@@ -21,6 +21,7 @@ export const defaultData: Note[] = [
     }
 ];
 
+// Mock an api with a promise returning the fake data
 export const fetchData = (): Promise<Note[]> => {
     return new Promise((resolve) => {
         resolve(defaultData);

@@ -57,6 +57,14 @@ describe('NewNote.vue', () => {
     expect(wrapper.emitted().closeNewNote).toBeTruthy()
   })
 
+  it('saves the note if one of title or content are input', async () => {
+    const wrapper = shallowMount(NewNote, { store, localVue });
+    await wrapper.setData({ title: 'a title', content: '' })
+    const button = wrapper.find('.newNote__button--save');
+    await button.trigger('click');
+    expect(actions.addNote).toHaveBeenCalled();
+  })
+
   it('does not save the note if both title and content are missing', async () => {
     const wrapper = shallowMount(NewNote, { store, localVue });
     await wrapper.setData({ title: '', content: '' })

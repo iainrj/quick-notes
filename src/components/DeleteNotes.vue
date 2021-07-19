@@ -2,7 +2,7 @@
   <div class="deleteNotes">
     <div class="deleteNotes__message">
       <span>{{ confirmMessage }}</span>
-      <span v-if="selectedIds.length > 1">&nbsp;IDs: {{ selectedIds.toString() }}</span>
+      <span v-if="selectedIds.length > 1" class="deleteNotes__message--ids">&nbsp;IDs: {{ selectedIds.toString() }}</span>
     </div>
     <div class="deleteNotes__buttonGroup">
       <button @click="closeDialog" class="deleteNotes__buttonGroup--button deleteNotes__buttonGroup--cancel">No</button>
@@ -50,7 +50,7 @@ export default Vue.extend({
   color: #fff;
   min-height: 50px;
   border-radius: 4px;
-  position: absolute;
+  position: fixed;
   bottom: 16px;
   width: 60%;
   z-index: 4;
@@ -67,6 +67,10 @@ export default Vue.extend({
     &::before {
       content: url('../assets/warning.svg');
       margin-right: 8px;
+    }
+
+    &--ids {
+      font-weight: 600;
     }
   }
 

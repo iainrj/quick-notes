@@ -35,7 +35,7 @@ html {
   --textColor: #4a4a4a;
   --textColor2: #6e6e6e;
   --accentGrey: rgb(134, 134, 134);
-  --appBlue: rgb(12, 84, 137);
+  --appBlue: rgb(14, 114, 161);
   --appRed: #ec0b0b;
 }
 body {

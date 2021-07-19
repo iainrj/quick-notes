@@ -35,13 +35,15 @@ export default Vue.extend({
   methods: {
     ...mapActions(['addNote']),
     closeDialog() {
+      this.active = false;
       this.$emit('closeNewNote');
     },
     async handleAddNote() {
+      // don't save if no title or content
       if (!this.title && !this.content) return;
 
       const newNote: Note = {
-        id: Date.now(),
+        id: Date.now(), // In real app should come from a uuid library
         title: this.title,
         content: this.content,
         status: 'New',
@@ -55,6 +57,8 @@ export default Vue.extend({
     },
   },
   watch: {
+    // set an active flag so we don't show the validation
+    // message when the dialog has just been opened
     title(newV, oldV) {
       if (!oldV && newV) {
         this.active = true;
@@ -65,7 +69,7 @@ export default Vue.extend({
         this.active = true;
       }
     },
-  }
+  },
 })
 </script>
 

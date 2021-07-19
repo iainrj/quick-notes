@@ -20,14 +20,14 @@ import Vue from 'vue'
 import { mapGetters } from 'vuex';
 
 export default Vue.extend({
-    name: 'NotesMetadata',
-    computed: {
-        ...mapGetters({
-            totalNotes: 'getTotalNotes',
-            completedNotes: 'getCompletedNotes',
-            notCompletedNotes: 'getNotCompletedNotes',
-        })
-    }
+  name: 'NotesMetadata',
+  computed: {
+    ...mapGetters({
+      totalNotes: 'getTotalNotes',
+      completedNotes: 'getCompletedNotes',
+      notCompletedNotes: 'getNotCompletedNotes',
+    }),
+  },
 })
 </script>
 

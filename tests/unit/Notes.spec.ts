@@ -123,4 +123,30 @@ describe('Notes.vue', () => {
     const ids = wrapper.findAll('.notes__noteRow--cell.notes__noteRow--id');
     expect(ids.at(0).text()).toBe('1');
   })
+
+  it('does not show the table when there are no notes', async () => {
+    const store = new Vuex.Store({
+      getters: {
+        getNotes: () => [],
+      },
+      actions,
+    });
+
+    const wrapper = shallowMount(Notes, { store, localVue });
+    const table = wrapper.find('.notes__table');
+    expect(table.isVisible()).toBe(false);
+  })
+
+  it('shows a message when there are no notes', async () => {
+    const store = new Vuex.Store({
+      getters: {
+        getNotes: () => [],
+      },
+      actions,
+    });
+
+    const wrapper = shallowMount(Notes, { store, localVue });
+    const message = wrapper.find('.notes__emptyMessage');
+    expect(message.text()).toBe('No notes yet! To add a new note use the button below');
+  })
 })

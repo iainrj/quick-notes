@@ -9,6 +9,7 @@ export interface Store {
   notes: Note[]
 }
 
+export type NoteKey = 'id' | 'title' | 'content' | 'status';
 export interface SortOrder {
   id: "asc" | "desc",
   title: "asc" | "desc",

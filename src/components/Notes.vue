@@ -1,6 +1,6 @@
 <template>
 <div class="notes">
-  <table class="notes__table">
+  <table class="notes__table" v-show="notes.length">
     <thead class="notes__table--header">
       <tr class="notes__noteRow">
         <th 
@@ -55,6 +55,9 @@
       </tr>
     </tbody>
   </table>
+
+  <h2 class="notes__emptyMessage" v-show="notes.length === 0">No notes yet! To add a new note use the button below</h2>
+
   <button class="notes__addButton" @click="handleAddNote">
     Add
   </button>
@@ -73,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Note, SortOrder } from '@/services/appTypes';
+import { Note, SortOrder, NoteKey } from '@/services/appTypes';
 import NewNote from '@/components/NewNote.vue';
 import DeleteNotes from '@/components/DeleteNotes.vue';
 import SortArrows from '@/components/SortArrows.vue';
@@ -91,8 +94,10 @@ export default Vue.extend({
         id: 'asc',
         title: 'asc',
         content: 'asc',
-        status: 'asc',
+        status: 'asc', // not sure what the order for status should be so have left it as alphabetical
       } as SortOrder,
+      // flag for if the sorting has been used once
+      // used to decided what sorting to use
       sortHasBeenClicked: {
         id: false,
         title: false,
@@ -140,6 +145,8 @@ export default Vue.extend({
     toggleNewNoteDialog() {
       this.showNewNote = !this.showNewNote;
     },
+    // array sort needs a value of 0, -1 or 1 to sort elements
+    // for string sorting, compare the uppercase string to ignore the case
     charSort(noteA: Note, noteB: Note, key: 'title' | 'content' | 'status'): 0 | 1 | -1 {
       const a = noteA[key].toUpperCase();
       const b = noteB[key].toUpperCase();
@@ -150,57 +157,50 @@ export default Vue.extend({
       return 0;
     },
     sortId(): Note[] {
-      this.sortHasBeenClicked.id = true;
-      const currentOrder = this.sortOrder.id;
-      // currently asc so make it desc
-      if (currentOrder === 'asc' || currentOrder === null) {
-        this.sortOrder.id = 'desc';
-        return this.notes.sort((a: Note, b: Note) => a.id - b.id);
-      }
-      
-      this.sortOrder.id = 'asc';
-      return this.notes.sort((a: Note, b: Note) => b.id - a.id);
+      return this.genericSort('id');
     },
     sortTitle(): Note[] {
-      const key = 'title';
-      const currentOrder = this.sortOrder.title;
-      // currently asc so make it desc
-      if (currentOrder === 'asc' && this.sortHasBeenClicked[key]) {
-        this.sortOrder.title = 'desc';
+      return this.genericSort('title');
+    },
+    sortContent(): Note[] {
+      return this.genericSort('content');
+    },
+    sortStatus(): Note[] {
+      return this.genericSort('status');
+    },
+    genericSort(key: NoteKey): Note[] {
+      const currentOrder = this.sortOrder[key];
+
+      // first click of heading
+      if (!this.sortHasBeenClicked[key]) {
+        this.sortOrder[key] = 'asc';
         this.sortHasBeenClicked[key] = true;
+
+        if (key === 'id') {
+          return this.notes.sort((a: Note, b: Note) => a.id - b.id);
+        }
         return this.notes.sort((a: Note, b: Note) => this.charSort(a, b, key));
+      }
+
+      // on other clicks
+      if (currentOrder === 'asc') {
+        this.sortOrder[key] = 'desc';
+        this.sortHasBeenClicked[key] = true;
+        if (key === 'id') {
+          return this.notes.sort((a: Note, b: Note) => b.id - a.id);
+        }
+        return this.notes.sort((a: Note, b: Note) => this.charSort(b, a, key));
       }
 
       this.sortOrder[key] = 'asc';
       this.sortHasBeenClicked[key] = true;
-      return this.notes.sort((a: Note, b: Note) => this.charSort(b, a, key));
-    },
-    sortContent() {
-      const key = 'content';
-      const currentOrder = this.sortOrder.content;
-      // currently asc so make it desc
-      if (currentOrder === 'asc' && this.sortHasBeenClicked[key]) {
-        this.sortOrder[key] = 'desc';
-        this.sortHasBeenClicked[key] = true;
-        return this.notes.sort((a: Note, b: Note) => this.charSort(a, b, 'content'));
+
+      if (key === 'id') {
+        return this.notes.sort((a: Note, b: Note) => a.id - b.id);
       }
-      this.sortOrder[key] = 'asc';
-      this.sortHasBeenClicked[key] = true;
-      return this.notes.sort((a: Note, b: Note) => this.charSort(b, a, 'content'));
+      return this.notes.sort((a: Note, b: Note) => this.charSort(a, b, key));
     },
-    sortStatus() {
-      const key = 'status';
-      const currentOrder = this.sortOrder.status;
-      // currently Completed so make Not completed
-      if (currentOrder === 'asc') {
-        this.sortOrder[key] = 'desc';
-        this.sortHasBeenClicked[key] = true;
-        return this.notes.sort((a: Note, b: Note) => this.charSort(a, b, key));
-      }
-      this.sortOrder[key] = 'asc';
-      this.sortHasBeenClicked[key] = true;
-      return this.notes.sort((a: Note, b: Note) => this.charSort(b, a, key));
-    },
+
   },
 });
 </script>

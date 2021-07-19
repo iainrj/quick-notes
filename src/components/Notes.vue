@@ -250,6 +250,10 @@ export default Vue.extend({
     &--header-status {
       min-width: 110px;
     }
+
+    &--id {
+      color: var(--appBlue);
+    }
   }
 
   &__addButton {

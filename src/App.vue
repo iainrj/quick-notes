@@ -56,7 +56,7 @@ button {
   outline: none;
   font: 300 15px 'Helvetica', sans-serif;
   padding: 0;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
 }
 

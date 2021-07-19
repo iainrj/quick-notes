@@ -82,7 +82,7 @@ export default Vue.extend({
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 70px;
+      width: 78px;
     }
 
     &--confirm {
